@@ -20,21 +20,24 @@ const LoginAccount = () => {
       });
 
       if (res.data.success) {
-        // Destructure data for better readability
         const { user, token, message } = res.data;
-
-        // Store auth data in local storage
+  
         localStorage.setItem("auth", JSON.stringify({ user, token }));
-
-        // Show success message
         toast.success(message);
-
-        // Redirect to the previous page or the root
-        navigate(location.state?.from || "/");
+  
+        // Check user role and navigate accordingly
+        if (user.role === "employee") {
+          navigate("/user/profile");
+        } else if (user.role === "admin") {
+          navigate("/admin/profile");
+        } else {
+          // Handle other roles or navigate to a default page
+          navigate("/");
+        }
       } else {
-        // Show error message
         toast.error(res.data.message);
       }
+      
     } catch (error) {
       console.error("Error during login:", error);
       toast.error("Something went wrong");

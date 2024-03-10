@@ -4,11 +4,13 @@ import { Navigate } from "react-router-dom";
 const ProtectedRoute = ({ children, allowedRoles }) => {
   //const navigate = useNavigate();
 
+  const authData = JSON.parse(localStorage.getItem("auth"));
+
   // Check if the user is authenticated
-  const isAuthenticated = !!localStorage.getItem("token");
+  const isAuthenticated = !!authData && !!authData.token;
 
   // Check if the user has the required role
-  const userRole = localStorage.getItem("role");
+  const userRole = authData ? authData.user.role : null;
 
   if (!isAuthenticated) {
     // Redirect to login if not authenticated or if the role is not allowed

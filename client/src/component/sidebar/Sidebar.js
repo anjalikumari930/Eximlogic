@@ -65,17 +65,17 @@ const Sidebar = () => {
         id="logo-sidebar"
         className={`fixed top-0 left-0 z-40 w-50 h-screen pt-20 transition-transform ${
           isSidebarOpen ? "" : "-translate-x-full"
-        } bg-purple border-r border-gray-200 sm:translate-x-0`}
+        } bg-blue-600 border-r border-gray-200 sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div className="h-full px-3 pb-4 overflow-y-auto bg-purple dark:bg-gray-800">
+        <div className="h-full px-3 pb-4 overflow-y-auto bg-blue-600 dark:bg-gray-800">
           <ul className="space-y-2 font-medium">
             {isAdmin
               ? Menus.map((menu, index) => (
                   <li key={index}>
                     <a
                       href={menu.path}
-                      className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white  hover:bg-gray-100  group hover:font-bold"
+                      className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white  hover:bg-gray-100 hover:text-black  group hover:font-bold"
                     >
                       {menu.src}
                       <span className="ms-2">{menu.title}</span>
@@ -86,7 +86,7 @@ const Sidebar = () => {
                   <li key={index}>
                     <a
                       href={menu.path}
-                      className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-100  group"
+                      className="flex items-center p-2 text-gray-50 rounded-lg dark:text-white hover:bg-gray-100 hover:text-black group"
                     >
                       {menu.src}
                       <span className="ms-2">{menu.title}</span>
