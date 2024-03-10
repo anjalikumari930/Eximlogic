@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const Register = () => {
-  const [name, setName] = useState("");
+  const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,15 +15,15 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("https://localhost:5000/api/v1/auth/register", {
-        name,
+      const res = await axios.post("http://localhost:5000/api/v1/auth/register", {
+        username,
         email,
         password,
        
       });
       if (res.data.success) {
         toast.success(res.data.message);
-        navigate("/login");
+        navigate("/");
       } else {
         toast.error(res.data.message);
       }
@@ -42,7 +42,7 @@ const Register = () => {
         <div className="mb-4">
           <input
             type="text"
-            value={name}
+            value={username}
             onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-primary"
             placeholder="Enter your Name"
