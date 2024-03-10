@@ -10,11 +10,11 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
   useEffect(() => {
     // Retrieve user data from localStorage based on the user ID
     const userData = JSON.parse(localStorage.getItem("auth"));
-    setUser(userData);
+    setUser(userData.user);
   }, []);
 
   const handleProfileClick = () => {
-    navigate(user.role === "admin" ? "/admin/profile" : "/user/profile");
+    navigate(user.role === "admin" ? "/admin/profile" : "/user/user-profile");
   };
 
   const handleLogout = () => {
@@ -55,7 +55,10 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
                 ></path>
               </svg>
             </button>
-            <a href="https://Anjali.github.io/" className="flex ms-2 md:me-24">
+            <a
+              href="https://github.com/anjalikumari930"
+              className="flex ms-2 md:me-24"
+            >
               <img src={logo} className="h-8 me-3" alt="Anjali logo" />
             </a>
           </div>
