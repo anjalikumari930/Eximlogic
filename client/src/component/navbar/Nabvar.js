@@ -19,18 +19,13 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
 
   const handleLogout = () => {
     // Clear local storage
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("user");
+    localStorage.removeItem("auth");
 
-    // Navigate to the login page
-    navigate("/")
-      .then(() => {
-        console.log("Navigation to login page successful");
-      })
-      .catch((error) => {
-        console.error("Navigation to login page failed:", error);
-      });
+    try {
+      navigate("/");
+    } catch (error) {
+      console.error("Navigation to login page failed:", error);
+    }
   };
 
   return (

@@ -27,7 +27,7 @@ const LoginAccount = () => {
   
         // Check user role and navigate accordingly
         if (user.role === "employee") {
-          navigate("/user/profile");
+          navigate("/user/user-profile");
         } else if (user.role === "admin") {
           navigate("/admin/profile");
         } else {
@@ -37,7 +37,7 @@ const LoginAccount = () => {
       } else {
         toast.error(res.data.message);
       }
-      
+
     } catch (error) {
       console.error("Error during login:", error);
       toast.error("Something went wrong");
