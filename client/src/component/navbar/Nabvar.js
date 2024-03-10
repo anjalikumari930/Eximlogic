@@ -1,19 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import { FcBusinessman } from "react-icons/fc";
-import { useUserStore } from "@/store/employeeStore";
-import { login } from "../../lib/constants/string.json";
 
-//main navbar header
-// eslint-disable-next-line react/prop-types
 const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
   const navigate = useNavigate();
-  const { user, setUser } = useUserStore(); // Use the user store
+  const [user, setUser] = useState(""); // Use the user store
 
   useEffect(() => {
     // Retrieve user data from localStorage based on the user ID
-    const userData = JSON.parse(localStorage.getItem("user"));
+    const userData = JSON.parse(localStorage.getItem("auth"));
     setUser(userData);
   }, []);
 
@@ -26,8 +22,6 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     localStorage.removeItem("user");
-    localStorage.removeItem("githubToken");
-    localStorage.removeItem("githubOrganization");
 
     // Navigate to the login page
     navigate("/")
@@ -66,22 +60,18 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
                 ></path>
               </svg>
             </button>
-            <a
-              href="https://mindfiredigital.github.io/"
-              className="flex ms-2 md:me-24"
-            >
-              <img src={logo} className="h-8 me-3" alt="MindfireFoss Logo" />
+            <a href="https://Anjali.github.io/" className="flex ms-2 md:me-24">
+              <img src={logo} className="h-8 me-3" alt="Anjali logo" />
             </a>
           </div>
           <div className="flex items-center">
             <div className="flex items-center ms-3">
               <div className="border-none outline-none">
                 <div
-                  
                   className="flex right-5 text-sm outline-none bg-transparent rounded-full border-none mr-4 cursor-pointer"
                   aria-expanded={isDropdownOpen}
                   onClick={toggleDropdown}
-                > 
+                >
                   <FcBusinessman className="w-8 h-8 rounded-full bg-primaryText" />
                 </div>
               </div>
@@ -93,7 +83,9 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
                       className="text-sm text-gray-900 dark:text-white cursor-pointer"
                       role="none"
                     >
-                      <span className="font-bold text-primaryText font-sans">{user.git_username}</span>
+                      <span className="font-bold text-primaryText font-sans">
+                        {user.username}
+                      </span>
                     </p>
                   </div>
                   <ul className="py-1" role="none">
@@ -103,7 +95,7 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
                         className="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                       >
-                        {login.profile}
+                        profile
                       </a>
                     </li>
 
@@ -113,7 +105,7 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
                         className="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                       >
-                        {login.signOut}
+                        signOut
                       </a>
                     </li>
                   </ul>

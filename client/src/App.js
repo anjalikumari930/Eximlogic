@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import ForbiddenPage from "./pages/ForbiddenPage";
+import ProtectedRoute from "./routes/protectedRoutes";
+import UserLayout from "./components/layout/UserLayout";
+
+import Profile from "./pages/Profile";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/restricted" element={<ForbiddenPage />} />
+
+        <Route
+          path="/admin/*"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <UserLayout>
+                <Routes>
+                  <Route path="/profile" element={<Profile />} />
+                </Routes>
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/user/*"
+          element={
+            <ProtectedRoute allowedRoles={["employee"]}>
+              <UserLayout>
+                <Routes>
+                  <Route path="/profile" element={<Profile />} />
+                </Routes>
+              </UserLayout>
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
 export default App;

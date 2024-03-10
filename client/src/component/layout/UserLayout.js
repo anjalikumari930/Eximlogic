@@ -1,7 +1,5 @@
 import Sidebar from "../sidebar/Sidebar";
 
-//layout for all pages
-// eslint-disable-next-line react/prop-types
 const UserLayout = ({ children }) => {
   return (
     <div className="relative">
