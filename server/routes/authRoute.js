@@ -6,7 +6,8 @@ import {
   testController,
   updateProfileController,
 } from "../controller/authcontroller.js";
-import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
+import { isAdmin } from "../middlewares/authMiddleware.js";
+import { verifyToken } from "../middlewares/authVerification.js";
 
 //router object
 const router = express.Router();
@@ -22,18 +23,18 @@ router.post("/login", loginController);
 router.post("/forgot-password", forgotPasswordController);
 
 //test routes
-router.get("/test", requireSignIn, isAdmin, testController);
+router.get("/test", isAdmin, testController);
 
 //protected User route auth
-router.get("/user-auth", requireSignIn, (req, res) => {
+router.get("/user-auth", verifyToken, (req, res) => {
   res.status(200).send({ ok: true });
 });
 //protected Admin route auth
-router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {
+router.get("/admin-auth", verifyToken, isAdmin, (req, res) => {
   res.status(200).send({ ok: true });
 });
 
 //update profile
-router.put("/profile", requireSignIn, updateProfileController);
+router.put("/profile", verifyToken, updateProfileController);
 
 export default router;
