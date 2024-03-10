@@ -1,11 +1,12 @@
-import "./App.css";
+import "./index.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import ForbiddenPage from "./pages/ForbiddenPage";
-import ProtectedRoute from "./routes/protectedRoutes";
-import UserLayout from "./components/layout/UserLayout";
-
+import ProtectedRoute from "./routes/protectedRoutes"; 
 import Profile from "./pages/Profile";
+import UserLayout from "./component/layout/UserLayout";
+import Register from "./pages/Register";
+import ForgotPasssword from "./pages/ForgotPassword";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/restricted" element={<ForbiddenPage />} />
-
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPasssword />} />
         <Route
           path="/admin/*"
           element={
@@ -33,7 +35,7 @@ function App() {
             <ProtectedRoute allowedRoles={["employee"]}>
               <UserLayout>
                 <Routes>
-                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/user-profile" element={<Profile />} />
                 </Routes>
               </UserLayout>
             </ProtectedRoute>
@@ -43,4 +45,5 @@ function App() {
     </BrowserRouter>
   );
 }
+
 export default App;

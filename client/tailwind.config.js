@@ -1,6 +1,10 @@
 module.exports = {
-  content: ["./src/*/.{js,jsx,ts,tsx}"],
-
+  content: [
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+    './app/**/*.{js,jsx}',
+    './src/**/*.{js,jsx}',
+  ],
   // enable dark mode via class strategy
   darkMode: "class",
 

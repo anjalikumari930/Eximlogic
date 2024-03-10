@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { useAuth } from "../../context/auth";
-
-const Login = () => {
+const LoginAccount = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
-  //form function
+
+  // Form submission function
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -20,28 +18,33 @@ const Login = () => {
         username,
         password,
       });
-      if (res && res.data.success) {
-        toast.success(res.data.message);
-        setAuth({
-          ...auth,
-          user: res.data.user,
-          token: res.data.token,
-        });
-        localStorage.setItem("auth", JSON.stringify(res.data));
-        navigate(location.state || "/");
+
+      if (res.data.success) {
+        // Destructure data for better readability
+        const { user, token, message } = res.data;
+
+        // Store auth data in local storage
+        localStorage.setItem("auth", JSON.stringify({ user, token }));
+
+        // Show success message
+        toast.success(message);
+
+        // Redirect to the previous page or the root
+        navigate(location.state?.from || "/");
       } else {
+        // Show error message
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error during login:", error);
       toast.error("Something went wrong");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-lg p-4 bg-white rounded-lg shadow-lg">
-        <div className="text-2xl text-center">login</div>
+    <div className="flex justify-center items-center min-h-screen">
+    <div className="w-full m-auto bg-white lg:max-w-lg border p-4 shadow-md">
+        <div className="text-2xl text-center">Login</div>
         <div className="text-center">
           Enter your username and password to login
         </div>
@@ -52,21 +55,21 @@ const Login = () => {
             </label>
             <input
               id="username"
-              type="username"
+              type="text"
               placeholder=""
-              value={username} // Bind value to the state variable
+              value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary"
             />
           </div>
           <div className="grid gap-2">
             <label htmlFor="password" className="block">
-              password
+              Password
             </label>
             <input
               id="password"
               type="password"
-              value={password} // Bind value to the state variable
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-primary"
             />
@@ -74,15 +77,30 @@ const Login = () => {
         </div>
         <div className="mt-4">
           <button
-            className="w-full px-4 py-2 bg-primary text-white rounded-xl focus:outline-none focus:bg-primary-dark"
+            type="button"
+            className="w-full px-4 py-2 bg-blue-600 text-white rounded-xl focus:outline-none focus:bg-primary-dark"
             onClick={handleSubmit}
           >
-            login
+            Login
           </button>
+        </div>
+        <div className="mt-4 text-center">
+          <p>
+            Don't have an account?{" "}
+            <Link to="/register" className="text-primary underline">
+              Register
+            </Link>
+          </p>
+          <p>
+            Forgot your password?{" "}
+            <Link to="/forgot-password" className="text-primary underline">
+              Forgot Password
+            </Link>
+          </p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginAccount;
