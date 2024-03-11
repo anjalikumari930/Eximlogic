@@ -24,7 +24,7 @@ app.use(morgan("dev"));
 //routes
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1",userRoute);
-app.use("api/v1",customerRoute);
+app.use("/api/v1",customerRoute);
 //Port
 const PORT = process.env.PORT || 5000;
 //run listen

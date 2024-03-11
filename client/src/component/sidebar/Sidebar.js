@@ -61,6 +61,11 @@ const Sidebar = () => {
       src: <VscRequestChanges />,
     },
     { title: "OS Projects", path: "/user/osprojects", src: <GrProjects /> },
+    {
+      title: "Customers",
+      path: "/user/customers",
+      src: <IoPeopleSharp />,
+    },
   ];
 
   const toggleSidebar = () => {

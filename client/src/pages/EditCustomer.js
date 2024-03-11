@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 const EditCustomer = ({ customer, closeModal, updateCustomer }) => {
   const [editedCustomer, setEditedCustomer] = useState({ ...customer });
   const [formError, setFormError] = useState("");
+  const token = JSON.parse(localStorage.getItem("auth"))?.token;
 
   const handleEditCustomer = async () => {
     try {
@@ -16,8 +17,13 @@ const EditCustomer = ({ customer, closeModal, updateCustomer }) => {
       }
 
       const res = await axios.put(
-        `http://localhost:5000/api/v1/customers/${customer.id}`,
-        editedCustomer
+        `http://localhost:5000/api/v1/customers/${customer._id}`,
+        editedCustomer,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       // Check if the update was successful
@@ -38,26 +44,33 @@ const EditCustomer = ({ customer, closeModal, updateCustomer }) => {
     }
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedCustomer((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center">
       <div className="bg-black bg-opacity-50 fixed inset-0"></div>
-      <div className="bg-white p-6 rounded-md z-10">
-        <h2 className="text-2xl font-bold mb-4">Edit Customer</h2>
-        {formError && <p className="text-red-500 mb-4">{formError}</p>}
-        <div className="mb-4">
+      <div className="bg-white p-6 rounded-md z-10 grid grid-cols-2 gap-4 max-h-screen-3/4">
+        <h2 className="text-2xl font-bold mb-4 col-span-2">Edit Customer</h2>
+        {formError && (
+          <p className="text-red-500 mb-4 col-span-2">{formError}</p>
+        )}
+        
+        <div className="mb-4 col-span-2">
           <label htmlFor="companyName" className="block text-gray-600">
             Company Name
           </label>
           <input
             type="text"
             id="companyName"
+            name="companyName"
             value={editedCustomer.companyName}
-            onChange={(e) =>
-              setEditedCustomer({
-                ...editedCustomer,
-                companyName: e.target.value,
-              })
-            }
+            onChange={handleInputChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             required
           />
@@ -69,19 +82,99 @@ const EditCustomer = ({ customer, closeModal, updateCustomer }) => {
           <input
             type="text"
             id="contactName"
+            name="contactName"
             value={editedCustomer.contactName}
-            onChange={(e) =>
-              setEditedCustomer({
-                ...editedCustomer,
-                contactName: e.target.value,
-              })
-            }
+            onChange={handleInputChange}
             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
             required
           />
         </div>
-        {/* Add other input fields for editing customer data as needed */}
-        <div className="flex justify-end">
+        <div className="mb-4">
+          <label htmlFor="contactTitle" className="block text-gray-600">
+            Contact Title
+          </label>
+          <input
+            type="text"
+            id="contactTitle"
+            name="contactTitle"
+            value={editedCustomer.contactTitle}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="region" className="block text-gray-600">
+            Region
+          </label>
+          <input
+            type="text"
+            id="region"
+            name="region"
+            value={editedCustomer.region}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="postalCode" className="block text-gray-600">
+            Postal Code
+          </label>
+          <input
+            type="text"
+            id="postalCode"
+            name="postalCode"
+            value={editedCustomer.postalCode}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="country" className="block text-gray-600">
+            Country
+          </label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            value={editedCustomer.country}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="city" className="block text-gray-600">
+            City
+          </label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            value={editedCustomer.city}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="phone" className="block text-gray-600">
+            Phone
+          </label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            value={editedCustomer.phone}
+            onChange={handleInputChange}
+            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+            required
+          />
+        </div>
+
+        <div className="col-span-2 flex justify-end">
           <button
             onClick={handleEditCustomer}
             className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue mr-2"

@@ -4,14 +4,7 @@ import generateRandomId from '../utils/generateRandomId.js';
 // Controller to create a new customer
 export const createCustomerController = async (req, res) => {
   try {
-    // Validate required fields
-    const requiredFields = ['companyName', 'contactName', 'contactTitle', 'region', 'postalCode', 'country', 'city', 'phone'];
-    for (const field of requiredFields) {
-      if (!req.body[field]) {
-        return res.status(400).json({ success: false, message: `${field} is required` });
-      }
-    }
-
+   
     const randomId = generateRandomId();
     const newCustomer = new Customer({ id: randomId, ...req.body });
     const savedCustomer = await newCustomer.save();
@@ -43,6 +36,7 @@ export const getAllCustomersController = async (req, res) => {
       $or: [
         { id: { $regex: searchQuery, $options: 'i' } },
         { companyName: { $regex: searchQuery, $options: 'i' } },
+        { contactName: { $regex: searchQuery, $options: 'i' } },
         // Add other fields for searching as needed
       ],
     };

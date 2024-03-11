@@ -11,14 +11,19 @@ const Customers = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const token = JSON.parse(localStorage.getItem("auth"))?.token;
 
   useEffect(() => {
     // Fetch customers data from the API
     const fetchCustomers = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5000/api/v1/customers?page=${currentPage}&limit=10&search=${searchTerm}`
-        );
+          `http://localhost:5000/api/v1/customers?page=${currentPage}&limit=10&search=${searchTerm}`,
+           {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
         setCustomers(res.data.customers);
         setTotalPages(res.data.totalPages);
@@ -59,8 +64,11 @@ const Customers = () => {
   const handleDeleteCustomer = async (customerId) => {
     try {
       const res = await axios.delete(
-        `http://localhost:5000/api/v1/customers/${customerId}`
-      );
+        `http://localhost:5000/api/v1/customers/${customerId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
 
       if (res.data.success) {
         // Reload the customers after deletion

@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 
 const AddCustomer = () => {
   const navigate = useNavigate();
+  const authData = JSON.parse(localStorage.getItem("auth"));
 
   const [customerData, setCustomerData] = useState({
     companyName: "",
@@ -29,14 +30,24 @@ const AddCustomer = () => {
     e.preventDefault();
 
     try {
+      const token = authData?.token; // Replace with your actual storage key
       const res = await axios.post(
         "http://localhost:5000/api/v1/customers",
-        customerData
+        customerData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-
       if (res.data.success) {
         toast.success(res.data.message);
-        navigate("/admin/customers"); // Redirect to the customers page after adding a customer
+        // Check user role and navigate accordingly
+        if (authData && authData.user && authData.user.role === "admin") {
+          navigate("/admin/customers"); // Redirect to the admin customers page
+        } else {
+          navigate("/user/dashboard"); // Redirect to the user dashboard
+        } // Redirect to the customers page after adding a customer
       } else {
         toast.error(res.data.message);
       }
