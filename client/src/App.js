@@ -1,4 +1,6 @@
 import "./index.css";
+
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import ForbiddenPage from "./pages/ForbiddenPage";
@@ -7,7 +9,8 @@ import Profile from "./pages/Profile";
 import UserLayout from "./component/layout/UserLayout";
 import Register from "./pages/Register";
 import ForgotPasssword from "./pages/ForgotPassword";
-
+import AddUser from "./pages/AddUser";
+import Users from "./pages/Users";
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +26,8 @@ function App() {
               <UserLayout>
                 <Routes>
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="/add-user" element={<AddUser />} />
+                  <Route path="/users" element={<Users />} />
                 </Routes>
               </UserLayout>
             </ProtectedRoute>

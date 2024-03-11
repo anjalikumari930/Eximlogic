@@ -4,7 +4,7 @@ import {
   loginController,
   forgotPasswordController,
   testController,
-  updateProfileController,
+  editUserController,
 } from "../controller/authcontroller.js";
 import { isAdmin } from "../middlewares/authMiddleware.js";
 import { verifyToken } from "../middlewares/authVerification.js";
@@ -35,6 +35,6 @@ router.get("/admin-auth", verifyToken, isAdmin, (req, res) => {
 });
 
 //update profile
-router.put("/profile", verifyToken, updateProfileController);
+router.patch("/users/:userId", verifyToken, editUserController);
 
 export default router;

@@ -195,3 +195,59 @@ export const updateProfileController = async (req, res) => {
     });
   }
 };
+
+export const editUserController = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { username, email, role, password } = req.body;
+
+    // Check if the user ID is valid
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid user ID",
+      });
+    }
+
+    // Check if the user exists
+    const existingUser = await user.findById(userId);
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Update user details
+    existingUser.username = username || existingUser.username;
+    existingUser.email = email || existingUser.email;
+    existingUser.role = role || existingUser.role;
+
+    // Update password if provided
+    if (password) {
+      const hashedPassword = await hashPassword(password);
+      existingUser.password = hashedPassword;
+    }
+
+    // Save the updated user
+    await existingUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      updatedUser: {
+        _id: existingUser._id,
+        username: existingUser.username,
+        email: existingUser.email,
+        role: existingUser.role,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: "Error updating user",
+      error,
+    });
+  }
+};
