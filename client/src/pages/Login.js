@@ -1,5 +1,5 @@
 
-import LoginAccount from "../component/auth/LoginAcoount";
+import LoginAccount from "../component/auth/LoginAccount";
 
 //login
 function Login() {

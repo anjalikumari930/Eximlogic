@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const LoginAccount = () => {
@@ -8,7 +8,7 @@ const LoginAccount = () => {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const location = useLocation();
+  
 
   // Form submission function
   const handleSubmit = async (e) => {
