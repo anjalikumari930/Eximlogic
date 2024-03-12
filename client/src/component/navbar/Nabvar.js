@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 import { FcBusinessman } from "react-icons/fc";
 
-const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
+const Navbar = ({toggleSidebar}) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(""); // Use the user store
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     // Retrieve user data from localStorage based on the user ID
@@ -26,6 +27,9 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
     } catch (error) {
       console.error("Navigation to login page failed:", error);
     }
+  };
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -70,6 +74,7 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
                   aria-expanded={isDropdownOpen}
                   onClick={toggleDropdown}
                 >
+                  <p className="flex items-center text-white font-bold">{user.role}</p>
                   <FcBusinessman className="w-8 h-8 rounded-full bg-primaryText" />
                 </div>
               </div>
@@ -88,23 +93,23 @@ const Navbar = ({ isDropdownOpen, toggleSidebar, toggleDropdown }) => {
                   </div>
                   <ul className="py-1" role="none">
                     <li>
-                      <a
+                      <p
                         onClick={handleProfileClick}
                         className="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                       >
-                        profile
-                      </a>
+                        Profile
+                      </p>
                     </li>
 
                     <li>
-                      <a
+                      <p
                         onClick={handleLogout}
                         className="block px-4 py-2 text-sm cursor-pointer text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                       >
-                        signOut
-                      </a>
+                        SignOut
+                      </p>
                     </li>
                   </ul>
                 </div>

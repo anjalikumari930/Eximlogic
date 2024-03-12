@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ApexCharts from 'react-apexcharts';
 
 const PieChart = () => {
+  // eslint-disable-next-line no-unused-vars
   const [chartData, setChartData] = useState({
     series: [10, 5],
     labels: ['Total Users', 'Active Users'],
