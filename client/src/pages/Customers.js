@@ -33,7 +33,7 @@ const Customers = () => {
     };
 
     fetchCustomers();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm , token]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);

@@ -27,9 +27,9 @@ const LoginAccount = () => {
   
         // Check user role and navigate accordingly
         if (user.role === "employee") {
-          navigate("/user/user-profile");
+          navigate("/user/dashboard");
         } else if (user.role === "admin") {
-          navigate("/admin/profile");
+          navigate("/admin/dashboard");
         } else {
           // Handle other roles or navigate to a default page
           navigate("/");
