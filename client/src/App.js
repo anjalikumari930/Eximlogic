@@ -11,6 +11,7 @@ import AddUser from "./pages/AddUser";
 import Users from "./pages/Users";
 import Customers from "./pages/Customers";
 import AddCustomer from "./pages/AddCustomers";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
                   <Route path="/users" element={<Users />} />
                   <Route path="/customers" element={<Customers />} />
                   <Route path="/add-customer" element={<AddCustomer />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                 </Routes>
               </UserLayout>
             </ProtectedRoute>
@@ -46,6 +48,7 @@ function App() {
                   <Route path="/user-profile" element={<Profile />} />
                   <Route path="/customers" element={<Customers />} />
                   <Route path="/add-customer" element={<AddCustomer />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                 </Routes>
               </UserLayout>
             </ProtectedRoute>
