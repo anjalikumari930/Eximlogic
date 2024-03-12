@@ -16,6 +16,7 @@ const Navbar = ({toggleSidebar}) => {
 
   const handleProfileClick = () => {
     navigate(user.role === "admin" ? "/admin/profile" : "/user/user-profile");
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogout = () => {
