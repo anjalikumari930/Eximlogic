@@ -1,6 +1,7 @@
 import user from "../models/user.js";
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
+import  mongoose  from "mongoose";
 
 export const registerController = async (req, res) => {
   try {

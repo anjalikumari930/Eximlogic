@@ -8,9 +8,13 @@ const Users = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    // Fetch users data from the API
     const fetchUsers = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("auth"))?.token;
@@ -18,15 +22,24 @@ const Users = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          params: {
+            page: currentPage,
+            limit: 10, // You can adjust the limit as needed
+            search: searchTerm,
+            sort: sortBy,
+            order: sortOrder,
+          },
         });
+
         setUsers(res.data.users);
+        setTotalPages(res.data.totalPages);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [currentPage, searchTerm, sortBy, sortOrder]);
 
   const handleEditUser = (user) => {
     setSelectedUser(user);
@@ -35,18 +48,36 @@ const Users = () => {
 
   const handleDeleteUser = async (userId) => {
     try {
+      const isConfirmed = window.confirm("Are you sure you want to delete this user?");
+  
+      if (!isConfirmed) {
+        return;
+      }
+  
       const token = JSON.parse(localStorage.getItem("auth"))?.token;
       await axios.delete(`http://localhost:5000/api/v1/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      // Remove the deleted user from the local state
+  
       setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
     } catch (error) {
       console.error("Error deleting user:", error);
     }
+  };
+
+  const handleSort = (column) => {
+    if (sortBy === column) {
+      setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortBy(column);
+      setSortOrder("asc");
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
   return (
@@ -61,13 +92,28 @@ const Users = () => {
         </Link>
       </div>
 
+      {/* Search Bar */}
+      <input
+        type="text"
+        placeholder="Search users..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="border p-2 mb-4"
+      />
+
       {/* Display users in a table */}
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border py-2 px-4">Username</th>
-            <th className="border py-2 px-4">Email</th>
-            <th className="border py-2 px-4">Role</th>
+            <th className="border py-2 px-4" onClick={() => handleSort("username")}>
+              Username
+            </th>
+            <th className="border py-2 px-4" onClick={() => handleSort("email")}>
+              Email
+            </th>
+            <th className="border py-2 px-4" onClick={() => handleSort("role")}>
+              Role
+            </th>
             <th className="border py-2 px-4">Actions</th>
           </tr>
         </thead>
@@ -96,20 +142,31 @@ const Users = () => {
         </tbody>
       </table>
 
+      {/* Pagination */}
+      <div className="flex justify-center mt-4">
+        {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => handlePageChange(page)}
+            className={`mx-2 p-2 border ${page === currentPage ? 'bg-gray-300' : ''}`}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
+
       {/* Edit User Modal */}
       {isEditModalOpen && (
         <EditUser
           user={selectedUser}
           closeModal={() => setIsEditModalOpen(false)}
           updateUser={(updatedUser) => {
-            // Update the user in the local state
             setUsers((prevUsers) =>
               prevUsers.map((user) =>
                 user._id === updatedUser._id ? updatedUser : user
               )
             );
 
-            // Close the modal
             setIsEditModalOpen(false);
           }}
         />

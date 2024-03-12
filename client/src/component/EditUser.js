@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const EditUser = ({ user, closeModal, updateUser }) => {
   const [editedUser, setEditedUser] = useState({
@@ -12,8 +13,8 @@ const EditUser = ({ user, closeModal, updateUser }) => {
   const handleEditUser = async () => {
     try {
       const token = JSON.parse(localStorage.getItem("auth"))?.token;
-      const res = await axios.put(
-        `http://localhost:5000/api/v1/users/${user._id}`,
+      const res = await axios.patch(
+        `http://localhost:5000/api/v1/auth/users/${user._id}`,
         editedUser,
         {
           headers: {
@@ -24,7 +25,8 @@ const EditUser = ({ user, closeModal, updateUser }) => {
 
       // Update the user in the parent component
       updateUser(res.data.updatedUser);
-
+      toast.success(res.data.message);
+      
       // Close the modal
       closeModal();
     } catch (error) {

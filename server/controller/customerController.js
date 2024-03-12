@@ -81,17 +81,20 @@ export const getCustomerByIdController = async (req, res) => {
 // Controller to update a customer by ID
 export const updateCustomerController = async (req, res) => {
   try {
-    const { customerId } = req.params;
-    const updatedCustomer = await Customer.findOneAndUpdate({ id: customerId }, req.body, {
+    const { id: customerId } = req.params;
+    //console.log('Received request to update customer with ID:', customerId);
+    const existingCustomer = await Customer.findOne({ _id: customerId });
+
+    if (!existingCustomer) {
+      return res.status(404).json({ success: false, message: 'Customer not found' });
+    }
+
+    const updatedCustomer = await Customer.findOneAndUpdate({ _id: customerId }, req.body, {
       new: true,
       runValidators: true,
     });
-    
-    if (updatedCustomer) {
-      res.status(200).json({ success: true, customer: updatedCustomer });
-    } else {
-      res.status(404).json({ success: false, message: 'Customer not found' });
-    }
+
+    res.status(200).json({ success: true, customer: updatedCustomer });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Error updating customer', error });
@@ -101,8 +104,8 @@ export const updateCustomerController = async (req, res) => {
 // Controller to delete a customer by ID
 export const deleteCustomerController = async (req, res) => {
   try {
-    const { customerId } = req.params;
-    const deletedCustomer = await Customer.findOneAndDelete({ id: customerId });
+    const { id: customerId } = req.params;
+    const deletedCustomer = await Customer.findOneAndDelete({ _id: customerId });
     
     if (deletedCustomer) {
       res.status(200).json({ success: true, message: 'Customer deleted successfully' });
