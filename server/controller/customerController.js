@@ -8,7 +8,7 @@ export const createCustomerController = async (req, res) => {
     const randomId = generateRandomId();
     const newCustomer = new Customer({ id: randomId, ...req.body });
     const savedCustomer = await newCustomer.save();
-    res.status(201).json({ success: true, customer: savedCustomer });
+    res.status(201).json({ success: true,message: 'Customer Added', customer: savedCustomer });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: 'Error creating customer', error });
