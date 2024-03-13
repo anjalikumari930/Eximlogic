@@ -1,11 +1,12 @@
 import user from "../models/user.js";
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
+import sendMail from "../smtp/sendMail.js";
 import JWT from "jsonwebtoken";
-import  mongoose  from "mongoose";
+import mongoose from "mongoose";
 
 export const registerController = async (req, res) => {
   try {
-    const { username, email, password ,role} = req.body;
+    const { username, email, password, role } = req.body;
 
     // Validation
     if (!username || !email || !password) {
@@ -35,6 +36,26 @@ export const registerController = async (req, res) => {
     });
     await newUser.save();
 
+    // Send congratulatory email
+    const emailSubject = "Welcome to Exim Logic!";
+    const emailText = `Congratulations ${username}, your account has been successfully registered at Exim Logic.`;
+    let emailHtml = `<p>Hello ${username},</p><p>Your account has been successfully registered at Exim Logic.</p>`;
+    
+    if (role === "user") {
+      emailHtml += `<p>You have access to all user-related tasks, including user dashboard and creating customers.</p>`;
+    } else if (role === "admin") {
+      emailHtml += `<p>You have access to all data and the ability to add and delete admins, users, and customers through the admin dashboard.</p>`;
+    }
+
+    const emailOptions = {
+      to: email,
+      subject: emailSubject,
+      text: emailText,
+      html: emailHtml,
+    };
+
+    await sendMail(emailOptions);
+
     res.status(201).send({
       success: true,
       message: "User registered successfully",
@@ -53,6 +74,7 @@ export const registerController = async (req, res) => {
     });
   }
 };
+
 
 //POST LOGIN
 export const loginController = async (req, res) => {
@@ -113,28 +135,21 @@ export const loginController = async (req, res) => {
 
 export const forgotPasswordController = async (req, res) => {
   try {
-    const { email, newPassword } = req.body;
+    const { email } = req.body;
     if (!email) {
       res.status(400).send({ message: "Email is required" });
     }
-    if (!newPassword) {
-      res.status(400).send({ message: "New Password is required" });
-    }
+    
     //check
     const employee = await user.findOne({ email });
     //validation
     if (!employee) {
       return res.status(404).send({
         success: false,
-        message: "Wrong Email Or Answer",
+        message: "Wrong Email Or Email Not Registered",
       });
     }
-    const hashed = await hashPassword(newPassword);
-    await user.findByIdAndUpdate(employee._id, { password: hashed });
-    res.status(200).send({
-      success: true,
-      message: "Password Reset Successfully",
-    });
+    
   } catch (error) {
     console.log(error);
     res.status(500).send({

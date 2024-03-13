@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+//schema for user
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -18,10 +19,10 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "employee"],
+      enum: ["admin", "employee","superadmin"],
       default: "employee",
     },
-  },
+  }, 
   { timestamps: true }
 );
 

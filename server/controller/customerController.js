@@ -100,7 +100,7 @@ export const updateCustomerController = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error updating customer', error });
   }
 };
-
+ 
 // Controller to delete a customer by ID
 export const deleteCustomerController = async (req, res) => {
   try {
