@@ -1,19 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners"; // Import loading animation
 
 const AddUser = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("employee"); // Set a default role
-  const [formError, setFormError] = useState(""); // State for form error
+  const [role, setRole] = useState("employee");
+  const [formError, setFormError] = useState("");
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading state to true
   
     // Form validation
     if (!username || !email || !password || !role) {
+      setIsLoading(false); // Reset loading state
       setFormError("All fields are required");
       return;
     }
@@ -36,14 +42,16 @@ const AddUser = () => {
         }
       )
       .then((res) => {
+        setIsLoading(false); // Reset loading state
         if (res.data.success) {
           toast.success(res.data.message);
-          // Optionally, you can redirect the user to another page after successful registration
+          navigate("/admin/users");
         } else {
           toast.error(res.data.message);
         }
       })
       .catch((error) => {
+        setIsLoading(false); // Reset loading state
         console.error("Error during registration:", error);
         toast.error("User Or Email Already Registered");
       });
@@ -104,8 +112,13 @@ const AddUser = () => {
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-400 focus:outline-none focus:shadow-outline-blue"
+          disabled={isLoading} // Disable button while loading
         >
-          Register
+          {isLoading ? (
+            <ClipLoader color="#ffffff" loading={true} size={24} /> // Show loading animation
+          ) : (
+            "Register" // Show normal text when not loading
+          )}
         </button>
       </form>
     </div>

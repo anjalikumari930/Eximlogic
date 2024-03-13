@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { ClipLoader } from "react-spinners"; // Import loading animation
 
 const AddCustomer = () => {
   const navigate = useNavigate();
   const authData = JSON.parse(localStorage.getItem("auth"));
+  const [isLoading, setIsLoading] = useState(false); // Loading state
 
   const [customerData, setCustomerData] = useState({
     companyName: "",
@@ -180,9 +182,14 @@ const AddCustomer = () => {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-400 focus:outline-none focus:shadow-outline-blue mt-4"
+          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-400 focus:outline-none focus:shadow-outline-blue"
+          disabled={isLoading} // Disable button while loading
         >
-          Add Customer
+          {isLoading ? (
+            <ClipLoader color="#ffffff" loading={true} size={24} /> // Show loading animation
+          ) : (
+            "Add Customer" // Show normal text when not loading
+          )}
         </button>
       </form>
     </div>
